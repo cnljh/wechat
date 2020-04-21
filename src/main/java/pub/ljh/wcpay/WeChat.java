@@ -20,6 +20,8 @@ public class WeChat {
 	private final String appid;
 	@Getter
 	private final String mchId;
+	@Getter
+	private final String apiKey;
 
 	private Pay pay = null;
 	private Sns sns = null;
@@ -36,6 +38,7 @@ public class WeChat {
 	public WeChat(String appid, String secret, String mchId, String key, InputStream keyStore) {
 		this.appid = appid;
 		this.mchId = mchId;
+		this.apiKey = key;
 
 		HttpClient client = null;
 		if (mchId != null && key != null) {

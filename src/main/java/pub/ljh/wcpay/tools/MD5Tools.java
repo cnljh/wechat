@@ -1,9 +1,9 @@
-package pub.ljh.wcpay.utils;
+package pub.ljh.wcpay.tools;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class MD5Utils {
+public class MD5Tools {
 
 	private final static char[] HEX_CHAR = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
