@@ -5,7 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class MD5Utils {
 
-	private final static char[] HEX_CHAR = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+	private final static char[] HEX_CHAR = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
 	public static byte[] encrypt(String key) {
 		try {
@@ -33,4 +33,9 @@ public class MD5Utils {
 		return new String(buf);
 	}
 
+	public static String encrypt(String key, boolean toUpperCase) {
+		byte[] bs = encrypt(key);
+		String hexStr = bytes2HexStr(bs);
+		return toUpperCase ? hexStr.toUpperCase() : hexStr;
+	}
 }

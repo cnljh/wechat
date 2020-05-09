@@ -1,4 +1,4 @@
-package pub.ljh.wcpay.client_;
+package pub.cnljh.wechat.client;
 
 import java.io.IOException;
 import java.io.InputStream;

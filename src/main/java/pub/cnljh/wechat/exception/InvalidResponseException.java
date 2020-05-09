@@ -1,4 +1,4 @@
-package pub.ljh.wcpay;
+package pub.cnljh.wechat.exception;
 
 public class InvalidResponseException extends PaymentV2Exception {
 

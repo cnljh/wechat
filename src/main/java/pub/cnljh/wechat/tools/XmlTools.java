@@ -1,9 +1,7 @@
-package pub.ljh.wcpay.tools;
+package pub.cnljh.wechat.tools;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;

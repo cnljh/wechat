@@ -1,4 +1,6 @@
-package pub.ljh.wcpay;
+package pub.cnljh.wechat.exception;
+
+import pub.ljh.wcpay.WeChatException;
 
 public class PaymentV2Exception extends WeChatException {
 

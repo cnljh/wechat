@@ -1,4 +1,4 @@
-package pub.ljh.wcpay.tools;
+package pub.cnljh.wechat.tools;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
