@@ -2,3 +2,4 @@
 /nbactions.xml
 /nb-configuration.xml
 /nbproject
+/src/test/resources/secret.properties

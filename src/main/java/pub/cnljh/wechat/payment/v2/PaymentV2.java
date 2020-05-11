@@ -4,13 +4,12 @@ import pub.cnljh.wechat.exception.VerifyFailedException;
 import pub.cnljh.wechat.exception.InvalidResponseException;
 import pub.cnljh.wechat.exception.PaymentV2Exception;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.Objects;
 import java.util.UUID;
-import java.util.function.IntFunction;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -22,12 +21,16 @@ import pub.cnljh.wechat.tools.XmlTools;
 public class PaymentV2 {
 
 	private final static boolean DEBUG = false;
+	private final static String DOMAIN = "https://api.mch.weixin.qq.com";
 	private final static String SANDBOXNEW = DEBUG ? "/sandboxnew" : "";
 
 	private final static Map<Class, String[]> LINK_MAP = new HashMap<Class, String[]>() {
 		{
-			put(UnifiedOrder.class, new String[]{"https://api.mch.weixin.qq.com" + SANDBOXNEW + "/pay/unifiedorder", "POST"});
-			put(OrderQuery.class, new String[]{"https://api.mch.weixin.qq.com" + SANDBOXNEW + "/pay/orderquery", "POST"});
+			put(UnifiedOrder.class, new String[]{DOMAIN + SANDBOXNEW + "/pay/unifiedorder", "POST"});
+			put(OrderQuery.class, new String[]{DOMAIN + SANDBOXNEW + "/pay/orderquery", "POST"});
+			put(CloseOrder.class, new String[]{DOMAIN + SANDBOXNEW + "/pay/closeorder", "POST"});
+			put(Refund.class, new String[]{DOMAIN + SANDBOXNEW + "/secapi/pay/refund", "POST"});
+			put(RefundQuery.class, new String[]{DOMAIN + SANDBOXNEW + "/pay/refundquery", "POST"});
 		}
 	};
 
@@ -49,6 +52,11 @@ public class PaymentV2 {
 		T operation = null;
 		try {
 			operation = clazz.newInstance();
+
+			if (operation instanceof NotifyOperation) {
+				return operation;
+			}
+
 			operation.url = link[0];
 			operation.method = link[1];
 			operation.reqMap = new HashMap();
@@ -64,21 +72,26 @@ public class PaymentV2 {
 	}
 
 	public Feedback exec(Operation operation) throws IOException {
-		Map<String, Object> reqMap = operation.reqMap;
+		String respXML;
+		if (operation instanceof NotifyOperation) {
+			respXML = ((NotifyOperation) operation).content;
+		} else {
+			Map<String, Object> reqMap = operation.reqMap;
 
-		String sign = createSign("MD5", reqMap, apiKey);
-		reqMap.put(Operation.Request.sign, sign);
+			String sign = createSign("MD5", reqMap, apiKey);
+			reqMap.put(Operation.Request.sign, sign);
 
-		Map<String, Object> params = reqMap;
-		String respXML = client.send(operation.url, operation.method, null, (String method) -> {
-			if ("GET".equals(method)) {
-				return HttpClient.toUrlParamsFormat(params);
-			}
-			if ("POST".equals(method)) {
-				return XmlTools.parse(params).asXML();
-			}
-			return null;
-		});
+			Map<String, Object> params = reqMap;
+			respXML = client.send(operation.url, operation.method, null, (String method) -> {
+				if ("GET".equals(method)) {
+					return HttpClient.toUrlParamsFormat(params);
+				}
+				if ("POST".equals(method)) {
+					return XmlTools.parse(params).asXML();
+				}
+				return null;
+			});
+		}
 
 		Map<String, Object> respMap;
 		try {
@@ -111,13 +124,16 @@ public class PaymentV2 {
 	}
 
 	public static String createSign(String type, Map<String, Object> params, String apiKey) {
+		Predicate<Object> isEmply = str -> str == null || String.valueOf(str).trim().isEmpty();
+
 		String str = params.entrySet().stream()
-						.filter(e -> !"sign".equals(e.getKey()))//排除sign
-						.sorted(Comparator.comparing(Map.Entry::getKey))
+						.filter(e -> !"sign".equals(e.getKey()) && !isEmply.test(e.getValue()))//排除sign和null值
+						.sorted(Map.Entry.comparingByKey())
 						.map(e -> e.toString())
 						.collect(Collectors.joining("&"));
 		str += "&key=" + apiKey;
 
 		return MD5Tools.bytes2HexStr(MD5Tools.encrypt(str)).toUpperCase();
 	}
+
 }

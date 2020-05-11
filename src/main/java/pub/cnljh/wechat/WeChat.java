@@ -56,6 +56,14 @@ public class WeChat {
 		return sns;
 	}
 
+	public WeChat() {
+		this.appid = null;
+		this.mchId = null;
+		this.apiKey = null;
+		this.secret = null;
+		this.keyStore = null;
+	}
+
 	@Builder(builderMethodName = "with")
 	public WeChat(@NonNull String appid, String secret, @NonNull String mchId, String apiKey, InputStream keyStore) {
 		this.appid = appid;
