@@ -37,6 +37,10 @@ public class WeChat {
 	}
 
 	public PaymentV2 paymentV2(@NonNull String appid, @NonNull String mchId, @NonNull String apiKey, @NonNull InputStream keyStore) {
+		if (!appid.equals(this.appid) || !mchId.equals(this.mchId)) {
+			HttpsClient client = new HttpsClient(keyStore, mchId);
+			return new PaymentV2(client, appid, mchId, apiKey);
+		}
 		if (paymentV2 == null) {
 			HttpsClient client = new HttpsClient(keyStore, mchId);
 			paymentV2 = new PaymentV2(client, appid, mchId, apiKey);

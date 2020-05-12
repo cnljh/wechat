@@ -1,8 +1,8 @@
 package pub.cnljh.wechat.payment.v2;
 
-public class OrderNotify extends NotifyOperation<OrderNotify.Response> {
+public class TradeNotify extends NotifyOperation<TradeNotify.Response> {
 
-	public OrderNotify() {
+	public TradeNotify() {
 		this.resp = new Response();
 	}
 

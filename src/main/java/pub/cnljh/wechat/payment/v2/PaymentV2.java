@@ -78,7 +78,7 @@ public class PaymentV2 {
 		} else {
 			Map<String, Object> reqMap = operation.reqMap;
 
-			String sign = createSign("MD5", reqMap, apiKey);
+			String sign = createSign("MD5", reqMap);
 			reqMap.put(Operation.Request.sign, sign);
 
 			Map<String, Object> params = reqMap;
@@ -107,7 +107,7 @@ public class PaymentV2 {
 			throw new PaymentV2Exception(returnCode + ":" + returnMsg);
 		}
 
-		if (!respMap.get(Operation.Response.sign).equals(createSign("MD5", respMap, apiKey))) {
+		if (!respMap.get(Operation.Response.sign).equals(createSign("MD5", respMap))) {
 			throw new VerifyFailedException(respXML);
 		}
 
@@ -116,11 +116,15 @@ public class PaymentV2 {
 		String resultCode = (String) respMap.get(Operation.Response.resultCode);
 		String errCode = (String) respMap.get(Operation.Response.errCode);
 		String errCodeDes = (String) respMap.get(Operation.Response.errCodeDes);
-		return new Feedback(resultCode, errCode, errCodeDes);
+		return new Feedback(operation.getClass(), resultCode, errCode, errCodeDes);
 	}
 
 	public static String createNonceStr() {
 		return UUID.randomUUID().toString().replace("-", "");
+	}
+
+	public String createSign(String type, Map<String, Object> params) {
+		return createSign(type, params, apiKey);
 	}
 
 	public static String createSign(String type, Map<String, Object> params, String apiKey) {

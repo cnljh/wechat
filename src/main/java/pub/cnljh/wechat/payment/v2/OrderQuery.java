@@ -70,8 +70,8 @@ public class OrderQuery extends Operation<OrderQuery.Request, OrderQuery.Respons
 			return TradeType.valueOf((String) reqMap.get(tradeType));
 		}
 
-		public String getTradeState() {
-			return (String) reqMap.get(tradeState);
+		public TradeState getTradeState() {
+			return TradeState.valueOf((String) reqMap.get(tradeState));
 		}
 
 		public String getBankType() {
