@@ -12,7 +12,7 @@ public class Feedback {
 	private final String errCodeDes;
 
 	public boolean isSuccess() {
-		return "SUCCESS".equals(resultCode);
+		return Dictionary.success.equals(resultCode);
 	}
 
 }

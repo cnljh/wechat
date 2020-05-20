@@ -1,5 +1,8 @@
 package pub.cnljh.wechat.tools;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import static java.lang.String.format;
 import java.util.HashMap;
 import java.util.Map;
 import org.dom4j.Document;
@@ -7,6 +10,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.dom.DOMElement;
+import org.dom4j.io.XMLWriter;
 
 public class XmlTools {
 

@@ -1,178 +1,88 @@
 package pub.cnljh.wechat.payment.v2;
 
-public class RefundQuery extends Operation<RefundQuery.Request, RefundQuery.Response> {
+public class RefundQuery extends GenerateOperation<RefundQuery.Request, RefundQuery.Response> {
 
-	public RefundQuery() {
-		this.req = new Request();
-		this.resp = new Response();
+	RefundQuery() {
+		this.req = new RealRequest();
+		this.resp = new RealResponse();
 	}
 
-	public class Request extends Operation.Request {
+	public interface Request extends GenerateOperation.Request {
 
-		public static final String transactionId = "transaction_id";
-		public static final String outTradeNo = "out_trade_no";
-		public static final String outRefundNo = "out_refund_no";
-		public static final String refundId = "refund_id";
-		public static final String offset = "offset";
+		String getTransactionId();
 
-		public String getTransactionId() {
-			return (String) reqMap.get(transactionId);
-		}
+		void setTransactionId(String transactionId);
 
-		public void setTransactionId(String transactionId) {
-			reqMap.put(Request.transactionId, transactionId);
-		}
+		String getOutTradeNo();
 
-		public String getOutTradeNo() {
-			return (String) reqMap.get(outTradeNo);
-		}
+		void setOutTradeNo(String outTradeNo);
 
-		public void setOutTradeNo(String outTradeNo) {
-			reqMap.put(Request.outTradeNo, outTradeNo);
-		}
+		String getOutRefundNo();
 
-		public String getOutRefundNo() {
-			return (String) reqMap.get(outRefundNo);
-		}
+		void setOutRefundNo(String outRefundNo);
 
-		public void setOutRefundNo(String outRefundNo) {
-			reqMap.put(Request.outRefundNo, outRefundNo);
-		}
+		String getRefundId();
 
-		public String getRefundId() {
-			return (String) reqMap.get(refundId);
-		}
+		void setRefundId(String refundId);
 
-		public void setRefundId(String refundId) {
-			reqMap.put(Request.refundId, refundId);
-		}
+		Integer getOffset();
 
-		public Integer getOffset() {
-			return (Integer) reqMap.get(offset);
-		}
-
-		public void setOffset(Integer offset) {
-			reqMap.put(Request.offset, offset);
-		}
+		void setOffset(Integer offset);
 
 	}
 
-	public class Response extends Operation.Response {
+	private class RealRequest extends GenerateOperation.RealRequest implements Request {
+	}
 
-		public static final String transactionId = "transaction_id";
-		public static final String outTradeNo = "out_trade_no";
-		public static final String totalRefundCount = "total_refund_count";
-		public static final String totalFee = "total_fee";
-		public static final String feeType = "fee_type";
-		public static final String cashFee = "cash_fee";
-		public static final String cashFeeType = "cash_fee_type";
-		public static final String settlementTotalFee = "settlement_total_fee";
-		public static final String refundCount = "refund_count";
+	public interface Response extends GenerateOperation.Response {
 
-		public static final String outRefundNo$n = "out_refund_no_$n";
-		public static final String refundId$n = "refund_id_$n";
-		public static final String refundChanne$n = "refund_channel_$n";
-		public static final String refundFee$n = "refund_fee_$n";
+		String getTransactionId();
 
-		public static final String couponRefundFee$n = "coupon_refund_fee_$n";
-		public static final String couponRefundCount$n = "coupon_refund_count_$n";
-		public static final String couponRefundId$n$m = "coupon_refund_id_$n_$m";
-		public static final String couponType$n$m = "coupon_type_$n_$m";
-		public static final String couponRefundFee$n$m = "coupon_refund_fee_$n_$m";
+		String getOutTradeNo();
 
-		public static final String refundStatus$n = "refund_status_$n";
-		public static final String refundAccount$n = "refund_account_$n";
-		public static final String refundRecvAccount$n = "refund_recv_accout_$n";
-		public static final String refundSuccessTime$n = "refund_success_time_$n";
+		Integer getTotalRefundCount();
 
-		public String getTransactionId() {
-			return (String) respMap.get(transactionId);
-		}
+		Integer getTotalFee();
 
-		public String getOutTradeNo() {
-			return (String) respMap.get(outTradeNo);
-		}
+		String getFeeType();
 
-		public Integer getTotalRefundCount() {
-			return (Integer) respMap.get(totalRefundCount);
-		}
+		Integer getCashFee();
 
-		public Integer getTotalFee() {
-			return (Integer) respMap.get(totalFee);
-		}
+		String getCashFeeType();
 
-		public String getFeeType() {
-			return (String) respMap.get(feeType);
-		}
+		Integer getSettlementTotalFee();
 
-		public Integer getCashFee() {
-			return (Integer) respMap.get(cashFee);
-		}
+		Integer getRefundCount();
 
-		public String getCashFeeType() {
-			return (String) respMap.get(cashFeeType);
-		}
+		String getOutRefundNo$n(int n);
 
-		public Integer getSettlementTotalFee() {
-			return (Integer) respMap.get(settlementTotalFee);
-		}
+		String getRefundId$n(int n);
 
-		public Integer getRefundCount() {
-			return (Integer) respMap.get(refundCount);
-		}
+		String getRefundChanne$n(int n);
 
-		public String getOutRefundNo$n(int idx) {
-			return (String) respMap.get(outRefundNo$n.replace("$n", String.valueOf(idx)));
-		}
+		Integer getRefundFee$n(int n);
 
-		public String getRefundId$n(int idx) {
-			return (String) respMap.get(refundId$n.replace("$n", String.valueOf(idx)));
-		}
+		Integer getCouponRefundFee$n(int n);
 
-		public String getRefundChanne$n(int idx) {
-			return (String) respMap.get(refundChanne$n.replace("$n", String.valueOf(idx)));
-		}
+		Integer getCouponRefundCount$n(int n);
 
-		public Integer getRefundFee$n(int idx) {
-			return (Integer) respMap.get(refundFee$n.replace("$n", String.valueOf(idx)));
-		}
+		String getCouponRefundId$n$m(int n, int m);
 
-		public Integer getCouponRefundFee$n(int idx) {
-			return (Integer) respMap.get(couponRefundFee$n.replace("$n", String.valueOf(idx)));
-		}
+		String getCouponType$n$m(int n, int m);
 
-		public Integer getCouponRefundCount$n(int idx) {
-			return (Integer) respMap.get(couponRefundCount$n.replace("$n", String.valueOf(idx)));
-		}
+		Integer getCouponRefundFee$n$m(int n, int m);
 
-		public String getCouponRefundId$n$m(int idx, int idx_) {
-			return (String) respMap.get(couponRefundId$n$m.replace("$n", String.valueOf(idx)).replace("$m", String.valueOf(idx_)));
-		}
+		String getRefundStatus$n(int n);
 
-		public String getCouponType$n$m(int idx, int idx_) {
-			return (String) respMap.get(couponType$n$m.replace("$n", String.valueOf(idx)).replace("$m", String.valueOf(idx_)));
-		}
+		String getRefundAccount$n(int n);
 
-		public Integer getCouponRefundFee$n$m(int idx, int idx_) {
-			return (Integer) respMap.get(couponRefundFee$n$m.replace("$n", String.valueOf(idx)).replace("$m", String.valueOf(idx_)));
-		}
+		String getRefundRecvAccount$n(int n);
 
-		public String getRefundStatus$n(int idx) {
-			return (String) respMap.get(refundStatus$n.replace("$n", String.valueOf(idx)));
-		}
+		String getRefundSuccessTime$n(int n);
 
-		public String getRefundAccount$n(int idx) {
-			return (String) respMap.get(refundAccount$n.replace("$n", String.valueOf(idx)));
-		}
+	}
 
-		public String getRefundRecvAccount$n(int idx) {
-			return (String) respMap.get(refundRecvAccount$n.replace("$n", String.valueOf(idx)));
-		}
-
-		public String getRefundSuccessTime$n(int idx) {
-			return (String) respMap.get(refundSuccessTime$n.replace("$n", String.valueOf(idx)));
-		}
-
+	private class RealResponse extends GenerateOperation.RealResponse implements Response {
 	}
 
 }

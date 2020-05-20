@@ -2,26 +2,27 @@ package pub.cnljh.wechat.payment.v2;
 
 import java.util.HashMap;
 import java.util.Map;
+import pub.cnljh.wechat.tools.XmlTools;
 
-public abstract class NotifyOperation<Resp extends Operation.Response> extends Operation<Operation.Request, Resp> {
-	
+public abstract class NotifyOperation< Resp> extends Operation< Resp> {
+
 	protected String content;
-	
+
 	public void content(String content) {
 		this.content = content;
 	}
-	
-	public Map<String, String> toback(Boolean success) {
+
+	public String toback(Boolean success) {
 		return toback(success, null);
 	}
-	
-	public Map<String, String> toback(Boolean success, String msg) {
+
+	public String toback(Boolean success, String msg) {
 		Map rtn = new HashMap();
-		rtn.put(Operation.Response.returnCode, success ? "SUCCESS" : "FAIL");
+		rtn.put(Dictionary.returnCode, success ? Dictionary.success : Dictionary.fail);
 		if (msg != null) {
-			rtn.put(Operation.Response.returnMsg, msg);
+			rtn.put(Dictionary.returnMsg, msg);
 		}
-		return rtn;
+		return XmlTools.parse(rtn).asXML();
 	}
-	
+
 }

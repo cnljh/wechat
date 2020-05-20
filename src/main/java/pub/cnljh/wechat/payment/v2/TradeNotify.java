@@ -2,102 +2,51 @@ package pub.cnljh.wechat.payment.v2;
 
 public class TradeNotify extends NotifyOperation<TradeNotify.Response> {
 
-	public TradeNotify() {
-		this.resp = new Response();
+	TradeNotify() {
+		this.resp = new RealResponse();
 	}
 
-	public class Response extends Operation.Response {
+	public interface Response extends Operation.Response {
 
-		public static final String openid = "openid";
-		public static final String isSubscribe = "is_subscribe";
-		public static final String tradeType = "trade_type";
-		public static final String bankType = "bank_type";
-		public static final String totalFee = "total_fee";
-		public static final String settlementTotalFee = "settlement_total_fee";
-		public static final String feeType = "fee_type";
-		public static final String cashFee = "cash_fee";
-		public static final String cashFeeType = "cash_fee_type";
-		public static final String couponFee = "coupon_fee";
-		public static final String couponCount = "coupon_count";
-		public static final String couponType$n = "coupon_type_$n	";
-		public static final String couponId$n = "coupon_id_$n	";
-		public static final String couponFee$n = "coupon_fee_$n";
-		public static final String transactionId = "transaction_id";
-		public static final String outTradeNo = "out_trade_no";
-		public static final String attach = "attach";
-		public static final String timeEnd = "time_end";
+		String getOpenid();
 
-		public String getOpenid() {
-			return (String) respMap.get(openid);
-		}
+		Boolean getIsSubscribe();
 
-		public Boolean getIsSubscribe() {
-			return "Y".equals((String) respMap.get(isSubscribe));
-		}
+		TradeType getTradeType();
 
-		public String getTradeType() {
-			return (String) respMap.get(tradeType);
-		}
+		String getBankType();
 
-		public String getBankType() {
-			return (String) respMap.get(bankType);
-		}
+		Integer getTotalFee();
 
-		public Integer getTotalFee() {
-			return (Integer) respMap.get(totalFee);
-		}
+		Integer getSettlementTotalFee();
 
-		public Integer getSettlementTotalFee() {
-			return (Integer) respMap.get(settlementTotalFee);
-		}
+		String getFeeType();
 
-		public String getFeeType() {
-			return (String) respMap.get(feeType);
-		}
+		Integer getCashFee();
 
-		public Integer getCashFee() {
-			return (Integer) respMap.get(cashFee);
-		}
+		String getCashFeeType();
 
-		public String getCashFeeType() {
-			return (String) respMap.get(cashFeeType);
-		}
+		Integer getCouponFee();
 
-		public Integer getCouponFee() {
-			return (Integer) respMap.get(couponFee);
-		}
+		Integer getCouponCount();
 
-		public Integer getCouponCount() {
-			return (Integer) respMap.get(couponCount);
-		}
+		String getCouponType$n(int idx);
 
-		public String getCouponType$n(int idx) {
-			return (String) respMap.get(couponType$n.replace("$n", String.valueOf(idx)));
-		}
+		String getCouponId$n(int idx);
 
-		public String getCouponId$n(int idx) {
-			return (String) respMap.get(couponId$n.replace("$n", String.valueOf(idx)));
-		}
+		Integer getCouponFee$n(int idx);
 
-		public Integer getCouponFee$n(int idx) {
-			return (Integer) respMap.get(couponFee$n.replace("$n", String.valueOf(idx)));
-		}
+		String getTransactionId();
 
-		public String getTransactionId() {
-			return (String) respMap.get(transactionId);
-		}
+		String getOutTradeNo();
 
-		public String getOutTradeNo() {
-			return (String) respMap.get(outTradeNo);
-		}
+		String getAttach();
 
-		public String getAttach() {
-			return (String) respMap.get(attach);
-		}
+		String getTimeEnd();
 
-		public String getTimeEnd() {
-			return (String) respMap.get(timeEnd);
-		}
+	}
+
+	private class RealResponse extends GenerateOperation.RealResponse implements Response {
 
 	}
 

@@ -1,88 +1,40 @@
 package pub.cnljh.wechat.payment.v2;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
-public abstract class Operation<Req extends Operation.Request, Resp extends Operation.Response> {
+public abstract class Operation<Resp> {
 
-	protected Map<String, Object> reqMap;
 	protected Map<String, Object> respMap;
 
-	protected String url;
-	protected String method;
-
-	protected Req req;
 	protected Resp resp;
-
-	public Req request() {
-		return this.req;
-	}
 
 	public Resp response() {
 		return this.resp;
 	}
 
-	@Override
-	public String toString() {
-		return String.format("%s(url=%s,method=%s,request=%s,response=%s)", this.getClass().getSimpleName(), url, method, reqMap, respMap);
-	}
+	public interface Response {
 
-	protected abstract class Request {
+		String getAppid();
 
-		@Override
-		public String toString() {
-			Class clazz = this.getClass();
-			return String.format("%s.%s%s", clazz.getDeclaringClass().getSimpleName(), clazz.getSimpleName(), reqMap);
-		}
+		String getErrCode();
 
-		public static final String appid = "appid";
-		public static final String mchId = "mch_id";
-		public static final String nonceStr = "nonce_str";
-		public static final String sign = "sign";
-		public static final String signType = "sign_type";
+		String getErrCodeDes();
 
-		public String getAppid() {
-			return (String) reqMap.get(appid);
-		}
+		String getMchId();
 
-		public void setAppid(String appid) {
-			reqMap.put(Request.appid, appid);
-		}
+		String getNonceStr();
 
-		public String getMchId() {
-			return (String) reqMap.get(mchId);
-		}
+		String getReturnCode();
 
-		public void setMchId(String mchId) {
-			reqMap.put(Request.mchId, mchId);
-		}
+		String getReturnMsg();
 
-		public String getNonceStr() {
-			return (String) reqMap.get(nonceStr);
-		}
-
-		public void setNonceStr(String nonceStr) {
-			reqMap.put(Request.nonceStr, nonceStr);
-		}
-
-		public String getSign() {
-			return (String) reqMap.get(sign);
-		}
-
-		public void setSign(String sign) {
-			reqMap.put(Request.sign, sign);
-		}
-
-		public String getSignType() {
-			return (String) reqMap.get(signType);
-		}
-
-		public void setSignType(String signType) {
-			reqMap.put(Request.signType, signType);
-		}
+		String getSign();
 
 	}
 
-	protected abstract class Response {
+	protected abstract class RealResponse {
 
 		@Override
 		public String toString() {
@@ -90,51 +42,249 @@ public abstract class Operation<Req extends Operation.Request, Resp extends Oper
 			return String.format("%s.%s%s", clazz.getDeclaringClass().getSimpleName(), clazz.getSimpleName(), respMap);
 		}
 
-		public static final String returnCode = "return_code";
-		public static final String returnMsg = "return_msg";
-		public static final String appid = "appid";
-		public static final String mchId = "mch_id";
-		public static final String nonceStr = "nonce_str";
-		public static final String sign = "sign";
-		public static final String resultCode = "result_code";
-		public static final String errCode = "err_code";
-		public static final String errCodeDes = "err_code_des";
-
 		public String getReturnCode() {
-			return (String) respMap.get(returnCode);
+			return (String) respMap.get(Dictionary.returnCode);
 		}
 
 		public String getReturnMsg() {
-			return (String) respMap.get(returnMsg);
+			return (String) respMap.get(Dictionary.returnMsg);
 		}
 
 		public String getAppid() {
-			return (String) respMap.get(appid);
+			return (String) respMap.get(Dictionary.appid);
 		}
 
 		public String getMchId() {
-			return (String) respMap.get(mchId);
+			return (String) respMap.get(Dictionary.mchId);
 		}
 
 		public String getNonceStr() {
-			return (String) respMap.get(nonceStr);
+			return (String) respMap.get(Dictionary.nonceStr);
 		}
 
 		public String getSign() {
-			return (String) respMap.get(sign);
+			return (String) respMap.get(Dictionary.sign);
 		}
 
 		public String getResultCode() {
-			return (String) respMap.get(resultCode);
+			return (String) respMap.get(Dictionary.resultCode);
 		}
 
 		public String getErrCode() {
-			return (String) respMap.get(errCode);
+			return (String) respMap.get(Dictionary.errCode);
 		}
 
 		public String getErrCodeDes() {
-			return (String) respMap.get(errCodeDes);
+			return (String) respMap.get(Dictionary.errCodeDes);
 		}
 
+		public String getDeviceInfo() {
+			return (String) respMap.get(Dictionary.deviceInfo);
+		}
+
+		public String getOpenid() {
+			return (String) respMap.get(Dictionary.openid);
+		}
+
+		public Boolean isSubscribe() {
+			return "Y".equals(respMap.get(Dictionary.isSubscribe));
+		}
+
+		public TradeType getTradeType() {
+			return TradeType.valueOf((String) respMap.get(Dictionary.tradeType));
+		}
+
+		public TradeState getTradeState() {
+			return TradeState.valueOf((String) respMap.get(Dictionary.tradeState));
+		}
+
+		public String getBankType() {
+			return (String) respMap.get(Dictionary.bankType);
+		}
+
+		public Integer getTotalFee() {
+			return Integer.valueOf((String) respMap.get(Dictionary.totalFee));
+		}
+
+		public String getFeeType() {
+			return (String) respMap.get(Dictionary.feeType);
+		}
+
+		public Integer getCashFee() {
+			return Integer.valueOf((String) respMap.get(Dictionary.cashFee));
+		}
+
+		public String getCashFeeType() {
+			return (String) respMap.get(Dictionary.cashFeeType);
+		}
+
+		public Integer getSettlementTotalFee() {
+			return Integer.valueOf((String) respMap.get(Dictionary.settlementTotalFee));
+		}
+
+		public Integer getCouponFee() {
+			return Integer.valueOf((String) respMap.get(Dictionary.couponFee));
+		}
+
+		public Integer getCouponCount() {
+			return Integer.valueOf((String) respMap.get(Dictionary.couponCount));
+		}
+
+		public String getCouponId$n(int n) {
+			return (String) respMap.get(Dictionary.couponId$n.replace("$n", String.valueOf(n)));
+		}
+
+		public String getCouponType$n(int n) {
+			return (String) respMap.get(Dictionary.couponType$n.replace("$n", String.valueOf(n)));
+		}
+
+		public Integer getCouponFee$n(int n) {
+			return Integer.valueOf((String) respMap.get(Dictionary.couponFee$n.replace("$n", String.valueOf(n))));
+		}
+
+		public String getTransactionId() {
+			return (String) respMap.get(Dictionary.transactionId);
+		}
+
+		public String getOutTradeNo() {
+			return (String) respMap.get(Dictionary.outTradeNo);
+		}
+
+		public String getAttach() {
+			return (String) respMap.get(Dictionary.attach);
+		}
+
+		public String getTimeEnd() {
+			return (String) respMap.get(Dictionary.timeEnd);
+		}
+
+		public String getTradeStateDesc() {
+			return (String) respMap.get(Dictionary.tradeStateDesc);
+		}
+
+		public Boolean getIsSubscribe() {
+			return "Y".equals((String) respMap.get(Dictionary.isSubscribe));
+		}
+
+		public String getOutRefundNo() {
+			return (String) respMap.get(Dictionary.outRefundNo);
+		}
+
+		public String getRefundId() {
+			return (String) respMap.get(Dictionary.refundId);
+		}
+
+		public Integer getRefundFee() {
+			return Integer.valueOf((String) respMap.get(Dictionary.refundFee));
+		}
+
+		public Integer getSettlementRefundFee() {
+			return Integer.valueOf((String) respMap.get(Dictionary.settlementRefundFee));
+		}
+
+		public Integer getCashRefundFee() {
+			return Integer.valueOf((String) respMap.get(Dictionary.cashRefundFee));
+		}
+
+		public Integer getCouponRefundFee() {
+			return Integer.valueOf((String) respMap.get(Dictionary.couponRefundFee));
+		}
+
+		public Integer getCouponRefundFee$n(int n) {
+			return Integer.valueOf((String) respMap.get(Dictionary.couponRefundFee$n.replace("$n", String.valueOf(n))));
+		}
+
+		public Integer getCouponRefundCount() {
+			return Integer.valueOf((String) respMap.get(Dictionary.couponRefundCount));
+		}
+
+		public String getCouponRefundId$n(int n) {
+			return (String) respMap.get(Dictionary.couponRefundId$n.replace("$n", String.valueOf(n)));
+		}
+
+		public String getPrepayId() {
+			return (String) respMap.get(Dictionary.prepayId);
+		}
+
+		public String getCodeUrl() {
+			return (String) respMap.get(Dictionary.codeUrl);
+		}
+
+		public Integer getTotalRefundCount() {
+			return Integer.valueOf((String) respMap.get(Dictionary.totalRefundCount));
+		}
+
+		public Integer getRefundCount() {
+			return Integer.valueOf((String) respMap.get(Dictionary.refundCount));
+		}
+
+		public String getOutRefundNo$n(int n) {
+			return (String) respMap.get(Dictionary.outRefundNo$n.replace("$n", String.valueOf(n)));
+		}
+
+		public String getRefundId$n(int n) {
+			return (String) respMap.get(Dictionary.refundId$n.replace("$n", String.valueOf(n)));
+		}
+
+		public String getRefundChanne$n(int n) {
+			return (String) respMap.get(Dictionary.refundChanne$n.replace("$n", String.valueOf(n)));
+		}
+
+		public Integer getRefundFee$n(int n) {
+			return Integer.valueOf((String) respMap.get(Dictionary.refundFee$n.replace("$n", String.valueOf(n))));
+		}
+
+		public Integer getCouponRefundCount$n(int n) {
+			return Integer.valueOf((String) respMap.get(Dictionary.couponRefundCount$n.replace("$n", String.valueOf(n))));
+		}
+
+		public String getCouponRefundId$n$m(int n, int m) {
+			return (String) respMap.get(Dictionary.couponRefundId$n$m.replace("$n", String.valueOf(n)).replace("$m", String.valueOf(m)));
+		}
+
+		public String getCouponType$n$m(int n, int m) {
+			return (String) respMap.get(Dictionary.couponType$n$m.replace("$n", String.valueOf(n)).replace("$m", String.valueOf(m)));
+		}
+
+		public Integer getCouponRefundFee$n$m(int n, int m) {
+			return Integer.valueOf((String) respMap.get(Dictionary.couponRefundFee$n$m.replace("$n", String.valueOf(n)).replace("$m", String.valueOf(m))));
+		}
+
+		public String getRefundStatus$n(int n) {
+			return (String) respMap.get(Dictionary.refundStatus$n.replace("$n", String.valueOf(n)));
+		}
+
+		public String getRefundAccount$n(int n) {
+			return (String) respMap.get(Dictionary.refundAccount$n.replace("$n", String.valueOf(n)));
+		}
+
+		public String getRefundRecvAccount$n(int n) {
+			return (String) respMap.get(Dictionary.refundRecvAccount$n.replace("$n", String.valueOf(n)));
+		}
+
+		public String getRefundSuccessTime$n(int n) {
+			return (String) respMap.get(Dictionary.refundSuccessTime$n.replace("$n", String.valueOf(n)));
+		}
+
+		public String getRefundStatus() {
+			return (String) respMap.get(Dictionary.refundStatus);
+		}
+
+		public LocalDateTime getSuccessTime() {
+			return LocalDateTime.parse((String) respMap.get(Dictionary.successTime), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		}
+
+		public String getRefundRecvAccout() {
+			return (String) respMap.get(Dictionary.refundRecvAccout);
+		}
+
+		public String getRefundAccount() {
+			return (String) respMap.get(Dictionary.refundAccount);
+		}
+
+		public String getRefundRequestSource() {
+			return (String) respMap.get(Dictionary.refundRequestSource);
+		}
 	}
+
 }

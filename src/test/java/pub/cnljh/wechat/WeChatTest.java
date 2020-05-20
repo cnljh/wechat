@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import pub.cnljh.wechat.client.HttpsClient;
 import pub.cnljh.wechat.payment.v2.CloseOrder;
 import pub.cnljh.wechat.payment.v2.Feedback;
 import pub.cnljh.wechat.payment.v2.TradeNotify;
@@ -23,7 +24,7 @@ public class WeChatTest extends BaseJunit4Test {
 	public void test() throws IOException {
 		PaymentV2 p = wechat.paymentV2();
 		System.out.println(p.equals(paymentV2));
-		PaymentV2 p2=	wechat.paymentV2("wx6db8e29760c48268", "1503333761", "V85s0fn9YrXIKzHEVLplRSQHNOhUML3L", new FileInputStream("C:\\Users\\Think\\Desktop\\workarea\\WXCertUtil\\cert\\1503333761_20200411_cert\\apiclient_cert.p12"));
+		PaymentV2 p2 = wechat.paymentV2("wx6db8e29760c48268", "1503333761", "V85s0fn9YrXIKzHEVLplRSQHNOhUML3L", new FileInputStream("C:\\Users\\Think\\Desktop\\workarea\\WXCertUtil\\cert\\1503333761_20200411_cert\\apiclient_cert.p12"));
 		System.out.println(p2.equals(paymentV2));
 	}
 

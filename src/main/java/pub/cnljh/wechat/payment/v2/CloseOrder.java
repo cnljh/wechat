@@ -1,27 +1,27 @@
 package pub.cnljh.wechat.payment.v2;
 
-public class CloseOrder extends Operation<CloseOrder.Request, CloseOrder.Response> {
+public class CloseOrder extends GenerateOperation<CloseOrder.Request, CloseOrder.Response> {
 
-	public CloseOrder() {
-		req = new Request();
-		resp = new Response();
+	CloseOrder() {
+		req = new RealRequest();
+		resp = new RealResponse();
 	}
 
-	public class Request extends Operation.Request {
+	public interface Request extends GenerateOperation.Request {
 
-		public static final String outTradeNo = "out_trade_no";
+		String getOutTradeNo();
 
-		public String getOutTradeNo() {
-			return (String) reqMap.get(outTradeNo);
-		}
-
-		public void setOutTradeNo(String outTradeNo) {
-			reqMap.put(Request.outTradeNo, outTradeNo);
-		}
+		void setOutTradeNo(String outTradeNo);
 
 	}
 
-	public class Response extends Operation.Response {
+	private class RealRequest extends GenerateOperation.RealRequest implements Request {
+	}
+
+	public interface Response extends GenerateOperation.Response {
+	}
+
+	private class RealResponse extends GenerateOperation.RealResponse implements Response {
 	}
 
 }
