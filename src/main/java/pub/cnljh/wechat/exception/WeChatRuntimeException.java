@@ -1,8 +1,12 @@
 package pub.cnljh.wechat.exception;
 
-public abstract class WeChatRuntimeException extends RuntimeException {
+public class WeChatRuntimeException extends RuntimeException {
 
 	public WeChatRuntimeException() {
+	}
+
+	public WeChatRuntimeException(int code, String msg) {
+		super(String.format("code: %s, msg: %s", code, msg));
 	}
 
 	public WeChatRuntimeException(String message) {

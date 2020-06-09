@@ -1,6 +1,6 @@
 package pub.cnljh.wechat.sns;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 import java.io.IOException;
 import java.security.AlgorithmParameters;
 import java.security.Key;
@@ -12,8 +12,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import pub.cnljh.wechat.client.HttpClient;
-import pub.ljh.wcpay.client.Method;
-import pub.ljh.wcpay.model.Code2SessionResp;
+
 
 public class Sns {
 
@@ -38,10 +37,11 @@ public class Sns {
 			params.put("grant_type", "authorization_code");
 			return HttpClient.toUrlParamsFormat(params);
 		});
-		return JSONObject.parseObject(res, Code2SessionResp.class);
+		Map json=JSON.parseObject(res);
+		return new Code2SessionResp(json);
 	}
 
-	public JSONObject decrypt(String sessionKey, String encryptedData, String iv) {
+	public Map decrypt(String sessionKey, String encryptedData, String iv) {
 		Decoder decoder = Base64.getDecoder();
 		try {
 			Key sKeySpec = new SecretKeySpec(decoder.decode(sessionKey), "AES");
@@ -49,7 +49,7 @@ public class Sns {
 
 			cipher.init(Cipher.DECRYPT_MODE, sKeySpec, generateIV(decoder.decode(iv)));
 			byte[] result = cipher.doFinal(decoder.decode(encryptedData));
-			return JSONObject.parseObject(new String(result, "UTF-8"));
+			return JSON.parseObject(new String(result, "UTF-8"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

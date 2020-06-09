@@ -1,7 +1,9 @@
 package pub.cnljh.wechat.sns;
 
 import java.util.Map;
+import lombok.ToString;
 
+@ToString(of = "resp")
 public class Code2SessionResp {
 
 	private final Map<String, Object> resp;
